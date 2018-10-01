@@ -83,7 +83,7 @@ public abstract class AbstractRuleTraverser implements RuleTraverser {
             getLogger().log(Level.SEVERE, "Cannot traverseContainer: " + container, e);
             throw new RuleRuntimeException("Cannot traverseContainer", e).setRuleContainer(container);
         } finally {
-            onEndTraversingContainer(container, listener, level, exception);
+            onEndTraversingContainer(container, listener, concurrencyHandler, level, exception);
         }
     }
 
@@ -113,7 +113,7 @@ public abstract class AbstractRuleTraverser implements RuleTraverser {
 
     protected abstract void onSuccessfulEndTraversingContainer(ConcurrencyHandler concurrencyHandler, int level);
 
-    protected void onEndTraversingContainer(RuleContainer container, RuleTraverseListener listener, int level, Throwable exception) {
+    protected void onEndTraversingContainer(RuleContainer container, RuleTraverseListener listener, ConcurrencyHandler concurrencyHandler, int level, Throwable exception) {
         listener.endTraversingContainer(container, exception, level);
     }
 

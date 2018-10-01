@@ -20,8 +20,6 @@ public class RuleManagerImpl implements RuleManager, RuleTraverseListener {
 
     private static final Logger logger = Logger.getLogger(RuleManagerImpl.class.getName());
 
-
-    private RuleTraverser traverser = new ConcurrentRuleTraverser();
     private ExecutionPath executionPath = new ExecutionPath();
 
     @Override
@@ -39,6 +37,7 @@ public class RuleManagerImpl implements RuleManager, RuleTraverseListener {
         getLogger().info("-------------------------------------------------------------------------------------------");
 
         try {
+
             return traverse(container);
         } catch (Throwable e) {
             getLogger().log(Level.SEVERE, "runContainer failed for container: " + container.getName(), e);
@@ -49,7 +48,7 @@ public class RuleManagerImpl implements RuleManager, RuleTraverseListener {
 
     protected boolean traverse(RuleContainer container) {
         try {
-
+            RuleTraverser traverser = new ConcurrentRuleTraverser();
             traverser.traverse(container, this);
             return traverser.isInterrupted();
         } catch (Exception e) {

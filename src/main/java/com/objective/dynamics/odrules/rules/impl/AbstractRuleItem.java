@@ -134,7 +134,7 @@ public abstract class AbstractRuleItem implements RuleItem {
 
     protected String toString0() {
         RuleContainer rootContainer = getRootContainer();
-        return "rootContainer name=" + (rootContainer == null ? "" : rootContainer.getName()) +
+        return "rootContainer name=" + rootContainer.getName() +
                 ", parentContainer name=" + (parentContainer == null ? "" : parentContainer.getName()) +
                 ", name='" + name + '\'' +
                 ", stopRequested='" + stopRequested + '\'' +

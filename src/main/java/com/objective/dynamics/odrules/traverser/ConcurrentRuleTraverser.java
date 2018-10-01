@@ -29,25 +29,26 @@ public class ConcurrentRuleTraverser extends AbstractRuleTraverser implements Ru
         getLogger().info(" &&& Started Traversing container: " + container.getName()
                 + "; name: " + container.getName());
         super.onStartTraversing(container);
-        synchronized (handlers) {
-            for (ConcurrencyHandler handler : handlers) {
-                handler.stopNow(); // To prevent possible thread leak
-            }
-            handlers.clear();
-        }
+        resetHandlers();
         getLogger().info("Ended Traversing container: " + container.getName()
                 + "; name: " + container.getName());
     }
 
+    private void resetHandlers() {
+        for (ConcurrencyHandler handler : handlers) {
+            handler.stopNow(); // To prevent possible thread leak
+            handlers.clear();
+        }
+    }
+
     @Override
     protected void onEndTraversing(RuleContainer container) {
-        synchronized (handlers) {
-            for (ConcurrencyHandler handler : handlers) {
-                if (handler.isRoot()) {
-                    handler.execute();
-                }
+        for (ConcurrencyHandler handler : handlers) {
+            if (handler.isRoot()) {
+                handler.execute();
             }
         }
+        resetHandlers();
     }
 
     protected ConcurrencyHandler getConcurrencyHandler(RuleContainer container) {
@@ -57,6 +58,12 @@ public class ConcurrentRuleTraverser extends AbstractRuleTraverser implements Ru
     }
 
     protected void onSuccessfulEndTraversingContainer(ConcurrencyHandler concurrencyHandler, int level) {
+    }
+
+    @Override
+    protected void onEndTraversingContainer(RuleContainer container, RuleTraverseListener listener, ConcurrencyHandler concurrencyHandler, int level, Throwable exception) {
+        concurrencyHandler.stopNow(); // To prevent possible thread leak
+        super.onEndTraversingContainer(container, listener, concurrencyHandler, level, exception);
     }
 
     protected void onTraversingRule(ConcurrencyHandler concurrencyHandler,

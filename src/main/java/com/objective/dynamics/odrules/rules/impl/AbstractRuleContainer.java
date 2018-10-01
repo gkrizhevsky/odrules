@@ -69,13 +69,10 @@ public abstract class AbstractRuleContainer extends AbstractRuleItem implements 
 
     private Map<String, RuleContainer> lazyRootContainerMap() {
         AbstractRuleContainer rootContainer = (AbstractRuleContainer) getRootContainerSafe();
-        if (rootContainer != null) {
-            if (rootContainer.containerMap == null) {
-                rootContainer.containerMap = new LinkedHashMap<>();
-            }
-            return rootContainer.containerMap;
+        if (rootContainer.containerMap == null) {
+            rootContainer.containerMap = new LinkedHashMap<>();
         }
-        return Collections.emptyMap();
+        return rootContainer.containerMap;
     }
 
     protected synchronized void addToContainerMap(Rule rule) {
@@ -97,13 +94,10 @@ public abstract class AbstractRuleContainer extends AbstractRuleItem implements 
 
     private Map<String, Rule> lazyRootRuleMap() {
         AbstractRuleContainer rootContainer = (AbstractRuleContainer) getRootContainerSafe();
-        if (rootContainer != null) {
-            if (rootContainer.ruleMap == null) {
-                rootContainer.ruleMap = new LinkedHashMap<>();
-            }
-            return rootContainer.ruleMap;
+        if (rootContainer.ruleMap == null) {
+            rootContainer.ruleMap = new LinkedHashMap<>();
         }
-        return Collections.emptyMap();
+        return rootContainer.ruleMap;
     }
 
 
